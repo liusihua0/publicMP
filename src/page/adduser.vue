@@ -1,6 +1,7 @@
 <template>
     <div class="fillcontain" id='adduser'>
         <head-top></head-top>
+
         <el-row style="margin-top: 20px;">
             <el-col :span="12" :offset="4">
                 <el-form :model="formData" :rules="rule" ref="formData" label-width="110px" class="demo-formData">
@@ -14,7 +15,7 @@
                     <el-form-item label="地区" prop="localt">
                         <template>
                           <el-radio-group v-model="formData.localt">
-                            <el-radio label="1">贵州</el-radio>
+                            <el-radio label="1">贵州123123</el-radio>
                             <el-radio label="2">非贵州</el-radio>
                           </el-radio-group>
                         </template>
