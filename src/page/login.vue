@@ -3,8 +3,9 @@
 	  	<transition name="form-fade" mode="in-out">
 	  		<section class="form_contianer" v-show="showLogin">
 		  		<div class="manage_tip">
-		  			<p>elm后台管理系统</p>
+		  			<p>黔通驾考后台管理系统</p>
 		  		</div>
+
 		    	<el-form :model="loginForm" :rules="rules" ref="loginForm">
 					<el-form-item prop="username">
 						<el-input v-model="loginForm.username" placeholder="用户名"><span>dsfsf</span></el-input>
@@ -13,21 +14,18 @@
 						<el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
 					</el-form-item>
 					<el-form-item>
-				    	<el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
+				    	<el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>                          
 				  	</el-form-item>
 				</el-form>
-				<p class="tip">温馨提示：</p>
-				<p class="tip">未登录过的新用户，自动注册</p>
-				<p class="tip">注册过的用户可凭账号密码登录</p>
+				<br>
+				<p class="tip">温馨提示：本系统无法注册</p>
 	  		</section>
 	  	</transition>
   	</div>
 </template>
 
 <script>
-	import {login, getAdminInfo} from '@/api/getData'
-	import {mapActions, mapState} from 'vuex'
-
+    import {deal_data,my_url,set_tttt} from '@/api/my_function'
 	export default {
 	    data(){
 			return {
@@ -38,41 +36,62 @@
 				rules: {
 					username: [
 			            { required: true, message: '请输入用户名', trigger: 'blur' },
+			            { min: 6, message: '最小长度为6位'},
+						{ max: 16, message: '最大长度为16位'}
 			        ],
 					password: [
-						{ required: true, message: '请输入密码', trigger: 'blur' }
+						{ required: true, message: '请输入密码', trigger: 'blur' },
+						{ min: 6, message: '最小长度为6位'},
+						{ max: 16, message: '最大长度为16位'}
 					],
 				},
 				showLogin: false,
 			}
 		},
 		mounted(){
+			
+
 			this.showLogin = true;
-			if (!this.adminInfo.id) {
-    			this.getAdminData()
-    		}
+
+			if (window.history && window.history.pushState) {
+			　　window.onpopstate = function () { 
+				window.history.pushState('forward', null, '#');
+			　　window.history.forward(1);
+			　　}
+		　　}
+		　　window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+		　　window.history.forward(1);
+			
 		},
 		computed: {
-			...mapState(['adminInfo']),
+			
 		},
 		methods: {
-			...mapActions(['getAdminData']),
 			async submitForm(formName) {
 				this.$refs[formName].validate(async (valid) => {
 					if (valid) {
-						const res = await login({user_name: this.loginForm.username, password: this.loginForm.password})
-						if (res.status == 1) {
-							this.$message({
-		                        type: 'success',
-		                        message: '登录成功'
-		                    });
-							this.$router.push('manage')
-						}else{
-							this.$message({
-		                        type: 'error',
-		                        message: res.message
-		                    });
-						}
+
+						var admin_username = this.loginForm.username
+						var admin_password = this.loginForm.password
+						// this.myfunction(phone: this.loginForm.username, password: this.loginForm.password).then(function (data){}
+						// const res = await login({user_name: this.loginForm.username, password: this.loginForm.password})
+				// this.$http.jsonp(my_url+'Pub/login',{params: {phone: this.loginForm.username, password: this.loginForm.password},jsonp:"_callback"}) .then(function (data){
+                     this.$http.post(my_url+'Admin/admin_login',{admin_username, admin_password},{emulateJSON:true}).then(function(data){  
+							var res = eval('(' + data.bodyText + ')');
+							if (res.status == 'success') {
+								this.$message({
+			                        type: 'success',
+			                        message: '登录成功'
+			                    });
+			                    set_tttt()
+								this.$router.push('rank')
+							}else{
+								this.$message({
+			                        type: 'error',
+			                        message: '账号密码错误'
+			                    });
+							}
+						});
 					} else {
 						this.$notify.error({
 							title: '错误',
@@ -83,17 +102,6 @@
 					}
 				});
 			},
-		},
-		watch: {
-			adminInfo: function (newValue){
-				if (newValue.id) {
-					this.$message({
-                        type: 'success',
-                        message: '检测到您之前登录过，将自动登录'
-                    });
-					this.$router.push('manage')
-				}
-			}
 		}
 	}
 </script>

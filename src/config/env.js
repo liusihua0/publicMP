@@ -9,11 +9,12 @@
 let baseUrl = ''; 
 let routerMode = 'history';
 let baseImgPath;
+let my_url = 'http://60.205.224.9:8089/Driving/';
 
 if (process.env.NODE_ENV == 'development') {
 	  baseUrl = 'http://localhost:8002';
     baseImgPath = 'http://localhost:8002/img/';
-}else{
+}else{	
 	  baseUrl = 'http://cangdu.org:8001';
     baseImgPath = 'http://cangdu.org:8001/img/';
 }
@@ -21,5 +22,7 @@ if (process.env.NODE_ENV == 'development') {
 export {
 	baseUrl,
 	routerMode,
-	baseImgPath
+	baseImgPath,
+	my_url
 }
+//C:\Users\Administrator\Desktop\驾考app\后台

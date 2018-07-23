@@ -1,13 +1,14 @@
-// see http://vuejs-templates.github.io/webpack for documentation.
+﻿// see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../manage/index.html'),
-    assetsRoot: path.resolve(__dirname, '../manage'),
+    port: 8060,
+    index: path.resolve(__dirname, '../Driving/manage/index.html'),
+    assetsRoot: path.resolve(__dirname, '../Driving/manage/'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/manage/',
+    assetsPublicPath: '/Driving/manage/',
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -27,23 +28,27 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-    context: [ //代理路径
-        '/shopping',
-        '/ugc',
-        '/v1',
-        '/v2',
-        '/v3',
-        '/v4',
-        '/bos',
-        '/member',
-        '/promotion',
-        '/eus',
-        '/payapi',
-        '/admin',
-        '/statis',
-        '/img',
-    ],
+    // proxyTable: {'/project_dzff/': { target: 'http://120.92.45.71/', //域名
+    proxyTable: {'/project_dzff/': { target: 'http://10.19.6.234:8080/Driving/', //域名
+    secure: false, 
+    changeOrigin: true,}
+    },
+    // context: [ //代理路径
+    //     '/shopping',
+    //     '/ugc',
+    //     '/v1',
+    //     '/v2',
+    //     '/v3',
+    //     '/v4',
+    //     '/bos',
+    //     '/member',
+    //     '/promotion',
+    //     '/eus',
+    //     '/payapi',
+    //     '/admin',
+    //     '/statis',
+    //     '/img',
+    // ],
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
